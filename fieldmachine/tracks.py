@@ -1,4 +1,5 @@
 """Area union, boundary clipping, quality samples, and settlement."""
+from . import fields
 
 def latest(events):
     out={}
@@ -14,7 +15,7 @@ def decide(events,fields,machines):
     out={}
     for mandate,e in latest(events).items():
         field=fields.get(mandate);machine=machines.get(mandate)
-        allowed=cells(field['event']['field_rect']) if field and field['geometry'] else set()
+        allowed=field['covered_cells'] if field and field['geometry'] else set()
         raw=[];valid=[];repeated=set();outside=set();after_fault=set()
         for segment in e['segments']:
             region=cells(segment['rect']);raw.append(region)
