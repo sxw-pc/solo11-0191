@@ -1,0 +1,3 @@
+[
+  {"kind":"track","id":"T-3","version":2,"mandate_id":"M-1","segments":[{"rect":[0,0,3,3],"at":"2026-06-01T09:00"},{"rect":[2,1,6,4],"at":"2026-06-01T10:30"}],"quality_samples":[{"witness":"inspector-a","depth_cm":23},{"witness":"inspector-b","depth_cm":22}],"minimum_depth_cm":20,"price_per_cell":750}
+]

@@ -1,0 +1,4 @@
+[
+  {"kind":"track","id":"T-1","version":1,"mandate_id":"M-1","segments":[{"rect":[0,0,3,3],"at":"2026-06-01T09:00"},{"rect":[2,1,5,4],"at":"2026-06-01T10:00"}],"quality_samples":[{"witness":"inspector-a","depth_cm":23},{"witness":"inspector-b","depth_cm":22}],"minimum_depth_cm":20,"price_per_cell":750},
+  {"kind":"track","id":"T-2","version":1,"mandate_id":"M-2","segments":[{"rect":[10,0,14,2],"at":"2026-06-02T09:00"}],"quality_samples":[{"witness":"inspector-a","depth_cm":22},{"witness":"inspector-c","depth_cm":21}],"minimum_depth_cm":20,"price_per_cell":800}
+]
