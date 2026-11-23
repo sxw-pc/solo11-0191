@@ -48,4 +48,18 @@ class Workflow(unittest.TestCase):
             with self.assertRaises(ValueError):import_file(self.db,'field',bad)
         self.assertEqual(before,report(self.db))
 
+    def test_distinct_field_machine_and_quality_boundaries(self):
+        import copy,json
+        from fieldmachine import fields,machines,tracks
+        events=[json.loads(x[0]) for x in self.db.execute('SELECT body FROM events ORDER BY seq')]
+        fe=[x for x in events if x['kind']=='field'];me=[x for x in events if x['kind']=='machine'];te=[x for x in events if x['kind']=='track']
+        conflict=copy.deepcopy(fe[1]);conflict.update(id='F-X',mandate_id='M-X',owner='other-owner')
+        self.assertFalse(fields.decide(fe+[conflict])['M-2']['valid'])
+        narrow=copy.deepcopy(me[0]);narrow.update(id='R-X',version=2,width_m=7,inspected_until='2026-05-01T00:00')
+        machine=machines.decide(me+[narrow],fields.decide(fe))['M-1']
+        self.assertFalse(machine['width']);self.assertFalse(machine['inspected'])
+        bad_quality=copy.deepcopy(te[0]);bad_quality.update(id='T-X',version=2,quality_samples=[{'witness':'inspector-a','depth_cm':10}])
+        settlement=tracks.decide(te+[bad_quality],fields.decide(fe),machines.decide(me,fields.decide(fe)))['M-1']
+        self.assertEqual(settlement['payable_area'],0)
+
 if __name__=='__main__':unittest.main()
