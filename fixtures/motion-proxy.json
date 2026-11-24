@@ -1,0 +1,76 @@
+{
+  "motion": {
+    "motion_id": "MOTION-SHARED-MACHINERY",
+    "title": "下季共享机具使用章程",
+    "version": 2,
+    "notice_cutoff": "2026-11-10T18:00",
+    "meeting_at": "2026-11-20T09:00",
+    "box_closed_at": "2026-11-20T12:00",
+    "quorum_ratio": 0.5,
+    "box_id": "BOX-SM-2026Q4",
+    "revision_note": "封箱前由 v1 修订为 v2，旧版票不得自动迁移"
+  },
+  "members": [
+    {"member_id": "A", "kind": "enrollment", "shares": 60,
+     "effective_on": "2026-01-01T00:00", "note": "初始在册 60 股"},
+    {"member_id": "B", "kind": "enrollment", "shares": 40,
+     "effective_on": "2026-01-01T00:00", "note": "初始在册 40 股"},
+    {"member_id": "A", "kind": "transfer", "from_member": "A", "to_member": "X",
+     "shares": 60, "effective_on": "2026-11-08T10:00", "draft": true,
+     "note": "会前日期的股权转让草稿，不产生效力"},
+    {"member_id": "A", "kind": "transfer", "from_member": "A", "to_member": "X",
+     "shares": 60, "effective_on": "2026-11-22T10:00", "draft": true,
+     "note": "会后日期的股权转让草稿，迟到且为草稿"},
+    {"member_id": "C", "kind": "enrollment", "shares": 25,
+     "effective_on": "2026-11-18T10:00",
+     "note": "截止日后才生效的新会员，迟到股权不形成本议案票权"}
+  ],
+  "grants": [
+    {"grant_id": "G-A-P-OLD", "principal": "A", "proxy": "P",
+     "scope_motion_id": "MOTION-SHARED-MACHINERY", "scope_version": 1,
+     "valid_from": "2026-11-01T00:00", "valid_until": "2026-11-30T00:00",
+     "note": "仅授权旧版 v1，范围不覆盖修订版 v2"},
+    {"grant_id": "G-A-P-V2", "principal": "A", "proxy": "P",
+     "scope_motion_id": "MOTION-SHARED-MACHINERY", "scope_version": 2,
+     "valid_from": "2026-11-12T00:00", "valid_until": "2026-11-30T00:00",
+     "note": "针对修订版 v2 的有效代理授权，可被撤销回执追及"}
+  ],
+  "revocations": [
+    {"grant_id": "G-A-P-OLD", "revoked_at": "2026-11-15T09:00",
+     "receipt_id": "RCV-OLD-1",
+     "note": "旧版授权撤销回执，撤销可追溯"}
+  ],
+  "ballots": [
+    {"ballot_id": "BL-A-SELF-2", "seal_id": "SEAL-A-SELF",
+     "principal_id": "A", "member_id": "A", "vote": "yes",
+     "motion_version": 2, "received_at": "2026-11-20T09:30",
+     "cast_at": "2026-11-20T09:25",
+     "note": "A 亲笔赞成票，与受托票同日入箱"},
+    {"ballot_id": "BL-A-PROXY-2", "seal_id": "SEAL-P-A",
+     "principal_id": "A", "member_id": "P", "vote": "no",
+     "motion_version": 2, "received_at": "2026-11-20T09:35",
+     "cast_at": "2026-11-20T09:30",
+     "note": "代理人 P 代 A 提交的反对票"},
+    {"ballot_id": "BL-B-2", "seal_id": "SEAL-B",
+     "principal_id": "B", "member_id": "B", "vote": "no",
+     "motion_version": 2, "received_at": "2026-11-20T10:00",
+     "cast_at": "2026-11-20T09:55",
+     "note": "B 反对 40 股"},
+    {"ballot_id": "BL-A-PROXY-2-DUP", "seal_id": "SEAL-P-A",
+     "principal_id": "A", "member_id": "P", "vote": "no",
+     "motion_version": 2, "received_at": "2026-11-20T11:00",
+     "note": "同一封签重复入箱，票箱层去重拒绝"},
+    {"ballot_id": "BL-A-LEGACY-1", "seal_id": "SEAL-A-OLD",
+     "principal_id": "A", "member_id": "A", "vote": "yes",
+     "motion_version": 1, "received_at": "2026-11-19T16:00",
+     "note": "封箱前修订前的旧版票，禁止迁移到 v2"}
+  ],
+  "evidence": [],
+  "expected_without_further_evidence": {
+    "result": "pending",
+    "reason": "A 的亲笔票与受托票竞争且无封存证据，60 股隔离待核；B 40 股反对有效",
+    "yes_weight": 0,
+    "no_weight": 40,
+    "pending_weight": 60
+  }
+}
