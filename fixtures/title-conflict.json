@@ -1,0 +1,37 @@
+{
+  "shared": [
+    {"kind": "title", "id": "TT-1", "seq": 1, "machine_id": "T1", "plate": "P-001", "engine_no": "EN-001", "registry_doc": "DOC-001", "owner": "CoopA"},
+    {"kind": "title", "id": "TT-2", "seq": 2, "machine_id": "T2", "plate": "P-002", "engine_no": "EN-002", "registry_doc": "DOC-002", "owner": "CoopA"},
+    {"kind": "title", "id": "TT-3", "seq": 3, "machine_id": "T3", "plate": "P-003", "engine_no": "EN-003", "registry_doc": "DOC-003", "owner": "CoopA"},
+    {"kind": "mortgage", "id": "EN-1", "seq": 4, "machine_id": "T2", "encumbrance_id": "MG-7", "holder": "RuralBank", "type": "mortgage", "effective_from": "2026-03-01T00:00", "effective_until": "2027-03-01T00:00"},
+    {"kind": "judicial_freeze", "id": "EN-2", "seq": 5, "machine_id": "T3", "encumbrance_id": "FZ-2", "holder": "CountyCourt", "type": "judicial_freeze", "effective_from": "2026-04-01T00:00"},
+    {"kind": "replate", "id": "RP-1", "seq": 6, "machine_id": "T1", "old_plate": "P-001", "new_plate": "P-001X", "engine_no": "EN-001", "registry_doc": "DOC-001"},
+    {"kind": "sale", "id": "SC-1", "seq": 7, "sale_id": "S1", "machine_id": "T1", "seller": "CoopA", "buyer": "CoopB", "signed_at": "2026-05-10T09:00", "valid_until": "2026-08-10T00:00", "signature_valid": true, "token": "APP-S1"},
+    {"kind": "sale", "id": "SC-2", "seq": 8, "sale_id": "S2", "machine_id": "T1", "seller": "CoopA", "buyer": "CoopC", "signed_at": "2026-05-10T10:00", "valid_until": "2026-08-10T00:00", "signature_valid": true, "token": "APP-S2"},
+    {"kind": "sale", "id": "SC-3", "seq": 9, "sale_id": "S3", "machine_id": "T2", "seller": "CoopA", "buyer": "CoopD", "signed_at": "2026-05-11T09:00", "valid_until": "2026-08-11T00:00", "signature_valid": true, "token": "APP-S3"},
+    {"kind": "sale", "id": "SC-4", "seq": 10, "sale_id": "S4", "machine_id": "T3", "seller": "CoopA", "buyer": "CoopE", "signed_at": "2026-05-11T10:00", "valid_until": "2026-08-11T00:00", "signature_valid": true, "token": "APP-S4"},
+    {"kind": "sale", "id": "SC-5", "seq": 11, "sale_id": "S5", "machine_id": "T1", "seller": "CoopA", "buyer": "CoopF", "signed_at": "2026-05-12T09:00", "valid_until": "2026-05-11T00:00", "signature_valid": true, "token": "APP-S5"},
+    {"kind": "transfer_app", "id": "TA-1", "seq": 12, "machine_id": "T1", "sale_id": "S1", "token": "APP-S1", "at": "2026-05-10T11:00", "plate": "P-001X", "engine_no": "EN-001", "registry_doc": "DOC-001"},
+    {"kind": "transfer_receipt", "id": "TR-1", "seq": 13, "machine_id": "T1", "sale_id": "S1", "token": "APP-S1", "at": "2026-05-10T11:30", "receipt_no": "RCV-1001"},
+    {"kind": "transfer_app", "id": "TA-2", "seq": 14, "machine_id": "T1", "sale_id": "S2", "token": "APP-S2", "at": "2026-05-10T12:00", "plate": "P-001X", "engine_no": "EN-001", "registry_doc": "DOC-001"},
+    {"kind": "pickup_notice", "id": "PN-EARLY", "seq": 15, "notice_id": "notice:early:S1", "sale_id": "S1", "machine_id": "T1", "buyer": "CoopB", "status": "on_record", "reason": "仓库凭受理回执提前登记的提机通知，产权未经终局确认"},
+    {"kind": "key_request", "id": "KR-1", "seq": 16, "request_id": "K-1", "machine_id": "T1", "sale_id": "S2", "requester": "CoopC", "at": "2026-05-10T13:00"}
+  ],
+  "outcome_a": [
+    {"kind": "registry_proof", "id": "PF-A1", "seq": 20, "token": "APP-S1", "phase": "completed", "machine_id": "T1", "sale_id": "S1", "buyer": "CoopB", "at": "2026-05-11T09:00"},
+    {"kind": "registry_proof", "id": "PF-A2", "seq": 21, "token": "APP-S2", "phase": "rejected", "machine_id": "T1", "sale_id": "S2", "at": "2026-05-11T09:05", "reason": "同机唯一：APP-S1 已完成终局登记"}
+  ],
+  "outcome_b": [
+    {"kind": "registry_proof", "id": "PF-B1", "seq": 20, "token": "APP-S2", "phase": "completed", "machine_id": "T1", "sale_id": "S2", "buyer": "CoopC", "at": "2026-05-11T08:00"},
+    {"kind": "registry_proof", "id": "PF-B2", "seq": 21, "token": "APP-S1", "phase": "rejected", "machine_id": "T1", "sale_id": "S1", "at": "2026-05-11T09:00", "reason": "同机唯一：APP-S2 已先获合法终局登记"}
+  ],
+  "late_s1_completion": [
+    {"kind": "registry_proof", "id": "PF-LATE", "seq": 30, "token": "APP-S1", "phase": "completed", "machine_id": "T1", "sale_id": "S1", "buyer": "CoopB", "at": "2026-05-12T09:00"}
+  ],
+  "fraud_identity": [
+    {"kind": "title", "id": "TT-FAKE", "seq": 40, "machine_id": "T1-FAKE", "plate": "P-999", "engine_no": "EN-001", "registry_doc": "DOC-OTHER", "owner": "CoopA"}
+  ],
+  "late_revocation": [
+    {"kind": "registry_proof", "id": "PF-REV", "seq": 40, "token": "APP-S2", "phase": "revoked", "machine_id": "T1", "sale_id": "S2", "restored_owner": "CoopA", "reason": "登记机关复查撤销 S2 过户", "affected_contracts": ["S2"], "at": "2026-05-13T09:00"}
+  ]
+}
