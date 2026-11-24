@@ -1,0 +1,1 @@
+{"events":[{"machine_id":"T1","depot_id":"A"},{"machine_id":"T2","depot_id":"B"}],"travel_minutes":{"jobs":["J1"],"A":{"J1":20},"B":{"J1":30}}}
