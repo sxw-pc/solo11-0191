@@ -1,0 +1,199 @@
+{
+  "scenario": "I1 落石险情：第 1 轮仅要求 driver 撤离；第 2 轮增加 controller 停机，并在本地发送水位落盘前断电。",
+  "incident_id": "I1",
+  "secrets": {
+    "driver": "driver-secret-I1",
+    "controller": "controller-secret-I1",
+    "site_lead": "lead-secret-I1"
+  },
+  "incident": {
+    "incident_id": "I1",
+    "round": 2,
+    "commands": [
+      "driver",
+      "controller"
+    ]
+  },
+  "acknowledgements": [
+    {
+      "receipt_id": "ACK-D-I1-R1",
+      "incident_id": "I1",
+      "round": 1,
+      "party": "driver",
+      "action": "evacuate",
+      "state": "acknowledged",
+      "received": true,
+      "content_root": "bd67dd1df6e71890df43d907d51b359bf9e76e2564aa9b7cac839fe0807f31a5",
+      "command_root": "85093b54a014a297d26d2004edfb4f4be7ba5a486f472f68a0e28231007318d4",
+      "token": "idem-5f9a704c52d464b8dff9aa69c33c7d02",
+      "algorithm": "HS256",
+      "signature": "4f9d9f8babc3164ce0aac775618f0eff29bd05e787d60460eacf526d5c1f6637"
+    }
+  ],
+  "rounds": {
+    "one": {
+      "incident": {
+        "incident_id": "I1",
+        "round": 1,
+        "commands": [
+          "driver"
+        ]
+      },
+      "status": "acknowledged",
+      "driver_receipt": {
+        "receipt_id": "ACK-D-I1-R1",
+        "incident_id": "I1",
+        "round": 1,
+        "party": "driver",
+        "action": "evacuate",
+        "state": "acknowledged",
+        "received": true,
+        "content_root": "bd67dd1df6e71890df43d907d51b359bf9e76e2564aa9b7cac839fe0807f31a5",
+        "command_root": "85093b54a014a297d26d2004edfb4f4be7ba5a486f472f68a0e28231007318d4",
+        "token": "idem-5f9a704c52d464b8dff9aa69c33c7d02",
+        "algorithm": "HS256",
+        "signature": "4f9d9f8babc3164ce0aac775618f0eff29bd05e787d60460eacf526d5c1f6637"
+      }
+    },
+    "two": {
+      "incident": {
+        "incident_id": "I1",
+        "round": 2,
+        "commands": [
+          "driver",
+          "controller"
+        ]
+      },
+      "status_after_expansion": "pending",
+      "stale_driver_redelivery": {
+        "receipt_id": "ACK-D-I1-R1",
+        "incident_id": "I1",
+        "round": 1,
+        "party": "driver",
+        "action": "evacuate",
+        "state": "acknowledged",
+        "received": true,
+        "content_root": "bd67dd1df6e71890df43d907d51b359bf9e76e2564aa9b7cac839fe0807f31a5",
+        "command_root": "85093b54a014a297d26d2004edfb4f4be7ba5a486f472f68a0e28231007318d4",
+        "token": "idem-5f9a704c52d464b8dff9aa69c33c7d02",
+        "algorithm": "HS256",
+        "signature": "4f9d9f8babc3164ce0aac775618f0eff29bd05e787d60460eacf526d5c1f6637"
+      }
+    }
+  },
+  "power_loss": {
+    "after": "round_2_prepared_and_controller_intent_durable",
+    "before": "local_controller_send_watermark",
+    "redelivered_after_restore": "ACK-D-I1-R1"
+  },
+  "intent": {
+    "role": "controller",
+    "action": "stop",
+    "round": 2,
+    "token": "idem-b06fcb5e5b16db413f61d5ea68f6480c",
+    "content_root": "c804e6f842b8574d73946634dce63da777968048dfc02e95a8779d156396a65c",
+    "command_root": "962103cac666c4bd45ecfcf812b46bb4732532548f7c300642f1e7d0197e5aeb"
+  },
+  "receipts": {
+    "controller_stop": {
+      "receipt_id": "ACK-C-I1-R2-STOP",
+      "incident_id": "I1",
+      "round": 2,
+      "party": "controller",
+      "action": "stop",
+      "state": "stopped",
+      "controller_state": "stopped",
+      "stopped": true,
+      "stop_proven": true,
+      "content_root": "c804e6f842b8574d73946634dce63da777968048dfc02e95a8779d156396a65c",
+      "command_root": "962103cac666c4bd45ecfcf812b46bb4732532548f7c300642f1e7d0197e5aeb",
+      "token": "idem-b06fcb5e5b16db413f61d5ea68f6480c",
+      "algorithm": "HS256",
+      "state_seq": 2,
+      "signature": "a6f4ed54ea5d9788e8d687cafe84af7e75a3cf5bfe418e57d850ac2f7aeb73e1"
+    },
+    "controller_revocation": {
+      "receipt_id": "ACK-C-I1-R2-REVOKE",
+      "incident_id": "I1",
+      "round": 2,
+      "party": "controller",
+      "action": "stop",
+      "state": "running",
+      "controller_state": "running",
+      "stopped": false,
+      "stop_confirmed": false,
+      "stop_revoked": true,
+      "content_root": "c804e6f842b8574d73946634dce63da777968048dfc02e95a8779d156396a65c",
+      "command_root": "962103cac666c4bd45ecfcf812b46bb4732532548f7c300642f1e7d0197e5aeb",
+      "token": "idem-b06fcb5e5b16db413f61d5ea68f6480c",
+      "algorithm": "HS256",
+      "state_seq": 3,
+      "signature": "c756457dba8eb35d649b8aad9c6c52020cdf2eca3c05f9b20d07c19c06f55b57"
+    }
+  },
+  "recovery_paths": {
+    "controller_confirmed": {
+      "controller_query": {
+        "query_id": "Q-CTRL-I1-R2-OK",
+        "incident_id": "I1",
+        "round": 2,
+        "party": "controller",
+        "action": "stop",
+        "token": "idem-b06fcb5e5b16db413f61d5ea68f6480c",
+        "content_root": "c804e6f842b8574d73946634dce63da777968048dfc02e95a8779d156396a65c",
+        "command_root": "962103cac666c4bd45ecfcf812b46bb4732532548f7c300642f1e7d0197e5aeb",
+        "landed": true,
+        "state": "stopped",
+        "controller_state": "stopped",
+        "stopped": true,
+        "stop_proven": true,
+        "proof": {
+          "type": "controller-state",
+          "device_id": "C-I1",
+          "state": "stopped"
+        },
+        "algorithm": "HS256",
+        "state_seq": 2,
+        "signature": "f1dd2801833be9d0f00b16189494877b662ca73a47f439f9012cc3d18b8b758b"
+      },
+      "stationary_confirmation": {
+        "confirmation_id": "LEAD-I1-R2",
+        "incident_id": "I1",
+        "round": 2,
+        "party": "site_lead",
+        "fact": "stationary",
+        "machines_stationary": true,
+        "content_root": "c804e6f842b8574d73946634dce63da777968048dfc02e95a8779d156396a65c",
+        "algorithm": "HS256",
+        "signature": "8e3698e2308555a4ede01f066677d4de1e5da3b84f8cc4dd25e10d08f9a46fdf"
+      },
+      "result": "resolved_and_completion_published"
+    },
+    "not_landed": {
+      "controller_query": {
+        "query_id": "Q-CTRL-I1-R2-MISS",
+        "incident_id": "I1",
+        "round": 2,
+        "party": "controller",
+        "action": "stop",
+        "token": "idem-b06fcb5e5b16db413f61d5ea68f6480c",
+        "content_root": "c804e6f842b8574d73946634dce63da777968048dfc02e95a8779d156396a65c",
+        "command_root": "962103cac666c4bd45ecfcf812b46bb4732532548f7c300642f1e7d0197e5aeb",
+        "landed": false,
+        "state": "not_landed",
+        "algorithm": "HS256",
+        "signature": "270b33c0f9c8e04c5284ea1039bea8ec44cf56a8948f5523f0a0219ad5f1d813"
+      },
+      "result": "same_token_safe_resend_remains_pending"
+    }
+  },
+  "expect": {
+    "round_one": "acknowledged",
+    "round_two_before_controller_stop": "pending",
+    "old_round_driver_redelivery": "duplicate_or_stale_fence_and_still_pending",
+    "confirmed_recovery_path": "resolved_with_one_completion_notification",
+    "not_landed_recovery_path": "pending_with_same_token_resend_only",
+    "duplicate_delivery": "no_second_effect",
+    "revocation": "append_correction_notification_and_keep_original"
+  }
+}
