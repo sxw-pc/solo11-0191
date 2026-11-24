@@ -1,0 +1,962 @@
+{
+  "schema": "fieldmachine-firmware-mixed/1",
+  "fixture": "firmware-mixed",
+  "machine_id": "FM-07",
+  "machine": "FM-07",
+  "target": "v2",
+  "scenario": "power_loss_ECU1_v2_booted_ECU2_v1_K2_converting",
+  "breakpoint_description_zh": "ECU1 已在 B 分区成功启动 v2，A 保留 v1；ECU2 仍在 A 分区运行 v1；K2 校准页已写入但未提交，K1 仍为已提交页；升级作业未写完成标记。",
+  "events": [
+    {
+      "seq": 1,
+      "controller_id": "ECU1",
+      "version": "v1",
+      "boot_verified": true
+    },
+    {
+      "seq": 2,
+      "controller_id": "ECU2",
+      "version": "v1",
+      "boot_verified": true
+    },
+    {
+      "seq": 3,
+      "controller_id": "ECU1",
+      "version": "v2",
+      "boot_verified": true,
+      "active_partition": "B"
+    }
+  ],
+  "versions": {
+    "ECU1": "v2",
+    "ECU2": "v1"
+  },
+  "hardware": {
+    "schema": "fieldmachine-firmware-mixed/1",
+    "machine_id": "FM-07",
+    "readback_source": "hardware_boot_control_block",
+    "controllers": {
+      "ECU1": {
+        "controller_id": "ECU1",
+        "role": "travel_controller",
+        "board_type": "DRIVE-CTRL-A1",
+        "active_slot": "B",
+        "pending_slot": "B",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "retained_good",
+            "retained": true,
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": "v2",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          }
+        }
+      },
+      "ECU2": {
+        "controller_id": "ECU2",
+        "role": "work_controller",
+        "board_type": "WORK-CTRL-B2",
+        "active_slot": "A",
+        "pending_slot": "A",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": null,
+            "state": "empty",
+            "boot_verified": false
+          }
+        }
+      }
+    },
+    "calibration": {
+      "state": "converting",
+      "active_page": "K1",
+      "committed_page": "K1",
+      "commit_marker": {
+        "schema": "K1",
+        "digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf"
+      },
+      "pages": {
+        "K1": {
+          "schema": "K1",
+          "state": "active_committed",
+          "data": {
+            "schema": "K1",
+            "machine_id": "FM-07",
+            "work_width_m": 3.0,
+            "section_count": 3,
+            "pulses_per_m": 58,
+            "gain": 1.02,
+            "offset_m": 0.015
+          },
+          "digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf"
+        },
+        "K2": {
+          "schema": "K2",
+          "state": "staged_uncommitted",
+          "data": {
+            "schema": "K2",
+            "machine_id": "FM-07",
+            "work_width_m": 3.0,
+            "section_count": 3,
+            "pulses_per_m": 58,
+            "gain_q16": 66847,
+            "offset_mm": 15,
+            "section_widths_m": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "amplitude_limit_deg": 35.0,
+            "converted_from": "K1",
+            "source_digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf",
+            "conversion_digest": "782b4640ffac3c141b212704a5d50d04229ac748dc8057708ab69f46dca02d29"
+          },
+          "digest": "14f5253c85e9c748264f82f9a888b53a351b6823a4335a1a5c5b48c7dc9bb1bb"
+        }
+      },
+      "conversion": {
+        "from": "K1",
+        "to": "K2",
+        "state": "staged_uncommitted"
+      }
+    },
+    "upgrade_job": {
+      "job_id": "JOB-FM07-V2",
+      "transaction_id": "TX-FM07-V2-0001",
+      "target": "v2",
+      "stage": "calibration_converting",
+      "completion_marker": false,
+      "completed": false,
+      "closed": false,
+      "retry_cursor": {
+        "controller_id": "ECU1",
+        "step": "calibration_commit",
+        "retry_count": 2
+      },
+      "transaction_log": [
+        {
+          "seq": 1,
+          "op": "packages_verified",
+          "result": "ok"
+        },
+        {
+          "seq": 2,
+          "op": "ecu1_flash_v2_slot_B",
+          "result": "ok"
+        },
+        {
+          "seq": 3,
+          "op": "ecu1_boot_self_test_B",
+          "result": "passed"
+        },
+        {
+          "seq": 4,
+          "op": "calibration_K1_to_K2_program",
+          "result": "power_lost_before_commit"
+        }
+      ]
+    },
+    "counters": {
+      "calibration_program": 1,
+      "calibration_commit": 0,
+      "calibration_discard": 0,
+      "flash": 1,
+      "boot_confirm": 1
+    },
+    "fault_injection": {
+      "self_test_fail": []
+    }
+  },
+  "readback": {
+    "kind": "firmware_capture",
+    "captured_from": "hardware_readback",
+    "readback": true,
+    "machine_id": "FM-07",
+    "partitions": {
+      "ECU1": {
+        "controller_id": "ECU1",
+        "board_type": "DRIVE-CTRL-A1",
+        "active_partition": "B",
+        "pending_partition": "B",
+        "active_slot": "B",
+        "pending_slot": "B",
+        "pending_boot_partition": "B",
+        "active_version": "v2",
+        "running_version": "v2",
+        "active_boot_verified": true,
+        "pending_version": "v2",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "retained_good",
+            "retained": true,
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": "v2",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      },
+      "ECU2": {
+        "controller_id": "ECU2",
+        "board_type": "WORK-CTRL-B2",
+        "active_partition": "A",
+        "pending_partition": "A",
+        "active_slot": "A",
+        "pending_slot": "A",
+        "pending_boot_partition": "A",
+        "active_version": "v1",
+        "running_version": "v1",
+        "active_boot_verified": true,
+        "pending_version": "v1",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": null,
+            "state": "empty",
+            "boot_verified": false
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      }
+    },
+    "dual_partition": {
+      "ECU1": {
+        "controller_id": "ECU1",
+        "board_type": "DRIVE-CTRL-A1",
+        "active_partition": "B",
+        "pending_partition": "B",
+        "active_slot": "B",
+        "pending_slot": "B",
+        "pending_boot_partition": "B",
+        "active_version": "v2",
+        "running_version": "v2",
+        "active_boot_verified": true,
+        "pending_version": "v2",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "retained_good",
+            "retained": true,
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": "v2",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      },
+      "ECU2": {
+        "controller_id": "ECU2",
+        "board_type": "WORK-CTRL-B2",
+        "active_partition": "A",
+        "pending_partition": "A",
+        "active_slot": "A",
+        "pending_slot": "A",
+        "pending_boot_partition": "A",
+        "active_version": "v1",
+        "running_version": "v1",
+        "active_boot_verified": true,
+        "pending_version": "v1",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": null,
+            "state": "empty",
+            "boot_verified": false
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      }
+    },
+    "controller_versions": {
+      "ECU1": "v2",
+      "ECU2": "v1"
+    },
+    "versions": {
+      "ECU1": "v2",
+      "ECU2": "v1"
+    },
+    "boot_verified": {
+      "ECU1": true,
+      "ECU2": true
+    },
+    "calibration": {
+      "committed_schema": "K1",
+      "active_page": "K1",
+      "staged_schema": "K2",
+      "staged_valid": true,
+      "transition_open": true,
+      "marker_valid": true,
+      "errors": []
+    },
+    "calibration_detail": {
+      "committed_schema": "K1",
+      "marker": {
+        "schema": "K1",
+        "digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf"
+      },
+      "marker_valid": true,
+      "committed_page_valid": true,
+      "active_page": "K1",
+      "staged_schema": "K2",
+      "staged_valid": true,
+      "transition_open": true,
+      "errors": []
+    },
+    "upgrade_job": {
+      "transaction_id": "TX-FM07-V2-0001",
+      "stage": "calibration_converting",
+      "closed": false,
+      "completion_marker": false,
+      "retry_cursor": {
+        "controller_id": "ECU1",
+        "step": "calibration_commit",
+        "retry_count": 2
+      }
+    },
+    "counters": {
+      "calibration_program": 1,
+      "calibration_commit": 0,
+      "calibration_discard": 0,
+      "flash": 1,
+      "boot_confirm": 1
+    }
+  },
+  "capture": {
+    "kind": "firmware_capture",
+    "captured_from": "hardware_readback",
+    "readback": true,
+    "machine_id": "FM-07",
+    "partitions": {
+      "ECU1": {
+        "controller_id": "ECU1",
+        "board_type": "DRIVE-CTRL-A1",
+        "active_partition": "B",
+        "pending_partition": "B",
+        "active_slot": "B",
+        "pending_slot": "B",
+        "pending_boot_partition": "B",
+        "active_version": "v2",
+        "running_version": "v2",
+        "active_boot_verified": true,
+        "pending_version": "v2",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "retained_good",
+            "retained": true,
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": "v2",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      },
+      "ECU2": {
+        "controller_id": "ECU2",
+        "board_type": "WORK-CTRL-B2",
+        "active_partition": "A",
+        "pending_partition": "A",
+        "active_slot": "A",
+        "pending_slot": "A",
+        "pending_boot_partition": "A",
+        "active_version": "v1",
+        "running_version": "v1",
+        "active_boot_verified": true,
+        "pending_version": "v1",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": null,
+            "state": "empty",
+            "boot_verified": false
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      }
+    },
+    "dual_partition": {
+      "ECU1": {
+        "controller_id": "ECU1",
+        "board_type": "DRIVE-CTRL-A1",
+        "active_partition": "B",
+        "pending_partition": "B",
+        "active_slot": "B",
+        "pending_slot": "B",
+        "pending_boot_partition": "B",
+        "active_version": "v2",
+        "running_version": "v2",
+        "active_boot_verified": true,
+        "pending_version": "v2",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "retained_good",
+            "retained": true,
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": "v2",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      },
+      "ECU2": {
+        "controller_id": "ECU2",
+        "board_type": "WORK-CTRL-B2",
+        "active_partition": "A",
+        "pending_partition": "A",
+        "active_slot": "A",
+        "pending_slot": "A",
+        "pending_boot_partition": "A",
+        "active_version": "v1",
+        "running_version": "v1",
+        "active_boot_verified": true,
+        "pending_version": "v1",
+        "slots": {
+          "A": {
+            "partition": "A",
+            "version": "v1",
+            "state": "boot_verified",
+            "boot_verified": true,
+            "self_test": "passed"
+          },
+          "B": {
+            "partition": "B",
+            "version": null,
+            "state": "empty",
+            "boot_verified": false
+          }
+        },
+        "readback": "hardware_boot_control_block"
+      }
+    },
+    "controller_versions": {
+      "ECU1": "v2",
+      "ECU2": "v1"
+    },
+    "versions": {
+      "ECU1": "v2",
+      "ECU2": "v1"
+    },
+    "boot_verified": {
+      "ECU1": true,
+      "ECU2": true
+    },
+    "calibration": {
+      "committed_schema": "K1",
+      "active_page": "K1",
+      "staged_schema": "K2",
+      "staged_valid": true,
+      "transition_open": true,
+      "marker_valid": true,
+      "errors": []
+    },
+    "calibration_detail": {
+      "committed_schema": "K1",
+      "marker": {
+        "schema": "K1",
+        "digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf"
+      },
+      "marker_valid": true,
+      "committed_page_valid": true,
+      "active_page": "K1",
+      "staged_schema": "K2",
+      "staged_valid": true,
+      "transition_open": true,
+      "errors": []
+    },
+    "upgrade_job": {
+      "transaction_id": "TX-FM07-V2-0001",
+      "stage": "calibration_converting",
+      "closed": false,
+      "completion_marker": false,
+      "retry_cursor": {
+        "controller_id": "ECU1",
+        "step": "calibration_commit",
+        "retry_count": 2
+      }
+    },
+    "counters": {
+      "calibration_program": 1,
+      "calibration_commit": 0,
+      "calibration_discard": 0,
+      "flash": 1,
+      "boot_confirm": 1
+    }
+  },
+  "partitions_readback": {
+    "ECU1": {
+      "controller_id": "ECU1",
+      "board_type": "DRIVE-CTRL-A1",
+      "active_partition": "B",
+      "pending_partition": "B",
+      "active_slot": "B",
+      "pending_slot": "B",
+      "pending_boot_partition": "B",
+      "active_version": "v2",
+      "running_version": "v2",
+      "active_boot_verified": true,
+      "pending_version": "v2",
+      "slots": {
+        "A": {
+          "partition": "A",
+          "version": "v1",
+          "state": "retained_good",
+          "retained": true,
+          "boot_verified": true,
+          "self_test": "passed"
+        },
+        "B": {
+          "partition": "B",
+          "version": "v2",
+          "state": "boot_verified",
+          "boot_verified": true,
+          "self_test": "passed"
+        }
+      },
+      "readback": "hardware_boot_control_block"
+    },
+    "ECU2": {
+      "controller_id": "ECU2",
+      "board_type": "WORK-CTRL-B2",
+      "active_partition": "A",
+      "pending_partition": "A",
+      "active_slot": "A",
+      "pending_slot": "A",
+      "pending_boot_partition": "A",
+      "active_version": "v1",
+      "running_version": "v1",
+      "active_boot_verified": true,
+      "pending_version": "v1",
+      "slots": {
+        "A": {
+          "partition": "A",
+          "version": "v1",
+          "state": "boot_verified",
+          "boot_verified": true,
+          "self_test": "passed"
+        },
+        "B": {
+          "partition": "B",
+          "version": null,
+          "state": "empty",
+          "boot_verified": false
+        }
+      },
+      "readback": "hardware_boot_control_block"
+    }
+  },
+  "calibration": {
+    "state": "converting",
+    "active_page": "K1",
+    "committed_page": "K1",
+    "commit_marker": {
+      "schema": "K1",
+      "digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf"
+    },
+    "pages": {
+      "K1": {
+        "schema": "K1",
+        "state": "active_committed",
+        "data": {
+          "schema": "K1",
+          "machine_id": "FM-07",
+          "work_width_m": 3.0,
+          "section_count": 3,
+          "pulses_per_m": 58,
+          "gain": 1.02,
+          "offset_m": 0.015
+        },
+        "digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf"
+      },
+      "K2": {
+        "schema": "K2",
+        "state": "staged_uncommitted",
+        "data": {
+          "schema": "K2",
+          "machine_id": "FM-07",
+          "work_width_m": 3.0,
+          "section_count": 3,
+          "pulses_per_m": 58,
+          "gain_q16": 66847,
+          "offset_mm": 15,
+          "section_widths_m": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "amplitude_limit_deg": 35.0,
+          "converted_from": "K1",
+          "source_digest": "0ad99d431ca9fecdd84cb5a385f03da3aaa0ac8a3539561b6371e29b799a3dbf",
+          "conversion_digest": "782b4640ffac3c141b212704a5d50d04229ac748dc8057708ab69f46dca02d29"
+        },
+        "digest": "14f5253c85e9c748264f82f9a888b53a351b6823a4335a1a5c5b48c7dc9bb1bb"
+      }
+    },
+    "conversion": {
+      "from": "K1",
+      "to": "K2",
+      "state": "staged_uncommitted"
+    }
+  },
+  "matrix": {
+    "matrix_id": "CM-FM-2026-Q4",
+    "kind": "cross_controller_compatibility_matrix",
+    "entries": [
+      {
+        "id": "CMB-v1-v1",
+        "controllers": {
+          "ECU1": "v1",
+          "ECU2": "v1"
+        },
+        "calibration": "K1",
+        "status": "certified",
+        "functions": [
+          "basic_tillage"
+        ]
+      },
+      {
+        "id": "CMB-v2-v2",
+        "controllers": {
+          "ECU1": "v2",
+          "ECU2": "v2"
+        },
+        "calibration": "K2",
+        "status": "certified",
+        "functions": [
+          "basic_tillage",
+          "amplitude_control"
+        ]
+      }
+    ],
+    "signer": "fieldmachine-offline-vendor",
+    "signature": "fac08965eabb65c267c3bd66b803415713b0fb05bbbb4d94f6b6151aa8c0fe53"
+  },
+  "compatibility_matrix": {
+    "matrix_id": "CM-FM-2026-Q4",
+    "kind": "cross_controller_compatibility_matrix",
+    "entries": [
+      {
+        "id": "CMB-v1-v1",
+        "controllers": {
+          "ECU1": "v1",
+          "ECU2": "v1"
+        },
+        "calibration": "K1",
+        "status": "certified",
+        "functions": [
+          "basic_tillage"
+        ]
+      },
+      {
+        "id": "CMB-v2-v2",
+        "controllers": {
+          "ECU1": "v2",
+          "ECU2": "v2"
+        },
+        "calibration": "K2",
+        "status": "certified",
+        "functions": [
+          "basic_tillage",
+          "amplitude_control"
+        ]
+      }
+    ],
+    "signer": "fieldmachine-offline-vendor",
+    "signature": "fac08965eabb65c267c3bd66b803415713b0fb05bbbb4d94f6b6151aa8c0fe53"
+  },
+  "packages": [
+    {
+      "package_id": "FW-ECU1-v1",
+      "controller_id": "ECU1",
+      "board_type": "DRIVE-CTRL-A1",
+      "version": "v1",
+      "calibration_schema": "K1",
+      "image": "FW1-ECU1-A1 retained vendor image FM-07\n",
+      "sha256": "a739564505074020eeaf8a2e2844aa33fa564907c0b32932118c542e1284316a",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "df9d504e40f0839b1c735803488bf52b51f9a3b3389442ae8318fbe105055d81"
+    },
+    {
+      "package_id": "FW-ECU1-v2",
+      "controller_id": "ECU1",
+      "board_type": "DRIVE-CTRL-A1",
+      "version": "v2",
+      "calibration_schema": "K2",
+      "image": "FW2-ECU1-A1 amplitude vendor image FM-07\n",
+      "sha256": "5ae6697dd612c11399c862bc9162ece4166cf198625a0ad4c9944f0e085ec9c0",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "42bd833835de3f23583f8015ab4e4755d47c4b116bb7064a89bdc82ca335faaa"
+    },
+    {
+      "package_id": "FW-ECU2-v1",
+      "controller_id": "ECU2",
+      "board_type": "WORK-CTRL-B2",
+      "version": "v1",
+      "calibration_schema": "K1",
+      "image": "FW1-ECU2-B2 work controller image FM-07\n",
+      "sha256": "a54786d83aea72daf041299774f39438f405b3fe329ebd87276138801183fbe6",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "6e764eb96410d5e2e3ee0e6603af83e0fadb22e39cc4a67c8d7882017e1d20d9"
+    },
+    {
+      "package_id": "FW-ECU2-v2",
+      "controller_id": "ECU2",
+      "board_type": "WORK-CTRL-B2",
+      "version": "v2",
+      "calibration_schema": "K2",
+      "image": "FW2-ECU2-B2 amplitude work image FM-07\n",
+      "sha256": "79261356993273d10ffe3f604646716b6fd91807620ac5052742f8de6679a80f",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "a6fdb9638f11bdddee66262860051584ff1715a1c67b363271625ca3b3d1766c"
+    }
+  ],
+  "firmware_packages": [
+    {
+      "package_id": "FW-ECU1-v1",
+      "controller_id": "ECU1",
+      "board_type": "DRIVE-CTRL-A1",
+      "version": "v1",
+      "calibration_schema": "K1",
+      "image": "FW1-ECU1-A1 retained vendor image FM-07\n",
+      "sha256": "a739564505074020eeaf8a2e2844aa33fa564907c0b32932118c542e1284316a",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "df9d504e40f0839b1c735803488bf52b51f9a3b3389442ae8318fbe105055d81"
+    },
+    {
+      "package_id": "FW-ECU1-v2",
+      "controller_id": "ECU1",
+      "board_type": "DRIVE-CTRL-A1",
+      "version": "v2",
+      "calibration_schema": "K2",
+      "image": "FW2-ECU1-A1 amplitude vendor image FM-07\n",
+      "sha256": "5ae6697dd612c11399c862bc9162ece4166cf198625a0ad4c9944f0e085ec9c0",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "42bd833835de3f23583f8015ab4e4755d47c4b116bb7064a89bdc82ca335faaa"
+    },
+    {
+      "package_id": "FW-ECU2-v1",
+      "controller_id": "ECU2",
+      "board_type": "WORK-CTRL-B2",
+      "version": "v1",
+      "calibration_schema": "K1",
+      "image": "FW1-ECU2-B2 work controller image FM-07\n",
+      "sha256": "a54786d83aea72daf041299774f39438f405b3fe329ebd87276138801183fbe6",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "6e764eb96410d5e2e3ee0e6603af83e0fadb22e39cc4a67c8d7882017e1d20d9"
+    },
+    {
+      "package_id": "FW-ECU2-v2",
+      "controller_id": "ECU2",
+      "board_type": "WORK-CTRL-B2",
+      "version": "v2",
+      "calibration_schema": "K2",
+      "image": "FW2-ECU2-B2 amplitude work image FM-07\n",
+      "sha256": "79261356993273d10ffe3f604646716b6fd91807620ac5052742f8de6679a80f",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "a6fdb9638f11bdddee66262860051584ff1715a1c67b363271625ca3b3d1766c"
+    }
+  ],
+  "recovery_token": {
+    "token_id": "RT-FM07-0001",
+    "kind": "vendor_recovery_token",
+    "action": "downgrade_to_v1",
+    "machine_id": "FM-07",
+    "target_versions": {
+      "ECU1": "v1",
+      "ECU2": "v1"
+    },
+    "calibration_rollback": true,
+    "transaction_id": "TX-FM07-V2-0001",
+    "expires_at": "2027-11-24T00:00:00",
+    "issued_at": "2026-11-24T08:00:00",
+    "signer": "fieldmachine-offline-vendor",
+    "signature": "e82501d93fb9cca4215027205889f8ed313fa3ddad865fa35bfd679721976c22"
+  },
+  "downgrade_token": {
+    "token_id": "RT-FM07-0001",
+    "kind": "vendor_recovery_token",
+    "action": "downgrade_to_v1",
+    "machine_id": "FM-07",
+    "target_versions": {
+      "ECU1": "v1",
+      "ECU2": "v1"
+    },
+    "calibration_rollback": true,
+    "transaction_id": "TX-FM07-V2-0001",
+    "expires_at": "2027-11-24T00:00:00",
+    "issued_at": "2026-11-24T08:00:00",
+    "signer": "fieldmachine-offline-vendor",
+    "signature": "e82501d93fb9cca4215027205889f8ed313fa3ddad865fa35bfd679721976c22"
+  },
+  "vendor_token": {
+    "token_id": "RT-FM07-0001",
+    "kind": "vendor_recovery_token",
+    "action": "downgrade_to_v1",
+    "machine_id": "FM-07",
+    "target_versions": {
+      "ECU1": "v1",
+      "ECU2": "v1"
+    },
+    "calibration_rollback": true,
+    "transaction_id": "TX-FM07-V2-0001",
+    "expires_at": "2027-11-24T00:00:00",
+    "issued_at": "2026-11-24T08:00:00",
+    "signer": "fieldmachine-offline-vendor",
+    "signature": "e82501d93fb9cca4215027205889f8ed313fa3ddad865fa35bfd679721976c22"
+  },
+  "history": {
+    "announcements": [
+      {
+        "id": "ANN-20261120-V2",
+        "kind": "upgrade_announcement",
+        "issued_at": "2026-11-20T09:00:00",
+        "target": "v2",
+        "title": "关于行驶控制器与作业控制器 v2 固件同步升级的公告",
+        "body_zh": "v2 升级包适用于 ECU1/ECU2 对应板型；两块控制器必须完成同版本升级、校准 K2 转换提交并通过逐板启动自检。未列入厂商兼容矩阵的混版组合一律停机，不得仅凭任一单板版本判为可出车。降级须持有厂商就本机签发的恢复令牌。",
+        "signer": "fieldmachine-offline-vendor",
+        "signature": "53a92f14b22f814f0507bd5920a1d7bc70eb5ec3c6405e57cce67240329db43b"
+      }
+    ],
+    "conclusions": [
+      {
+        "id": "C-20261123-OLD",
+        "kind": "roadworthy_conclusion",
+        "issued_at": "2026-11-23T18:30:00",
+        "machine_id": "FM-07",
+        "rule": "any_controller_at_target",
+        "ready": true,
+        "can_dispatch": true,
+        "roadworthy": true,
+        "grounded": false,
+        "controller_versions": {
+          "ECU1": "v2",
+          "ECU2": "v1"
+        },
+        "basis": [
+          "ECU1 reported version v2"
+        ],
+        "compatibility_matrix_checked": false,
+        "calibration_commit_checked": false,
+        "boot_readback_checked": false,
+        "note_zh": "旧规则见任一板达到目标版本即返回真；该结论已被新证明取代但保留备查。"
+      }
+    ]
+  },
+  "announcements": [
+    {
+      "id": "ANN-20261120-V2",
+      "kind": "upgrade_announcement",
+      "issued_at": "2026-11-20T09:00:00",
+      "target": "v2",
+      "title": "关于行驶控制器与作业控制器 v2 固件同步升级的公告",
+      "body_zh": "v2 升级包适用于 ECU1/ECU2 对应板型；两块控制器必须完成同版本升级、校准 K2 转换提交并通过逐板启动自检。未列入厂商兼容矩阵的混版组合一律停机，不得仅凭任一单板版本判为可出车。降级须持有厂商就本机签发的恢复令牌。",
+      "signer": "fieldmachine-offline-vendor",
+      "signature": "53a92f14b22f814f0507bd5920a1d7bc70eb5ec3c6405e57cce67240329db43b"
+    }
+  ],
+  "conclusions": [
+    {
+      "id": "C-20261123-OLD",
+      "kind": "roadworthy_conclusion",
+      "issued_at": "2026-11-23T18:30:00",
+      "machine_id": "FM-07",
+      "rule": "any_controller_at_target",
+      "ready": true,
+      "can_dispatch": true,
+      "roadworthy": true,
+      "grounded": false,
+      "controller_versions": {
+        "ECU1": "v2",
+        "ECU2": "v1"
+      },
+      "basis": [
+        "ECU1 reported version v2"
+      ],
+      "compatibility_matrix_checked": false,
+      "calibration_commit_checked": false,
+      "boot_readback_checked": false,
+      "note_zh": "旧规则见任一板达到目标版本即返回真；该结论已被新证明取代但保留备查。"
+    }
+  ],
+  "scope": {
+    "decides": [
+      "firmware_signature_and_board_fit",
+      "calibration_schema_and_commit",
+      "dual_bank_boot_verification",
+      "cross_controller_compatibility",
+      "safe_function_set",
+      "dispatch_readiness"
+    ],
+    "excluded": [
+      "plot_settlement",
+      "danger_evacuation_order",
+      "allocation_route"
+    ]
+  }
+}
