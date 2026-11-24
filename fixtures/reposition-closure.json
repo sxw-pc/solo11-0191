@@ -1,0 +1,37 @@
+{
+  "plan_id": "PLAN-2026-11-24-01",
+  "plan_version": 2,
+  "generated_at": "2026-11-24T07:30",
+  "fleet_ready_at": "2026-11-24T08:00",
+  "depot_events": [
+    {"machine_id": "T1", "depot_id": "A", "gross_weight_t": 38, "version": 1},
+    {"machine_id": "T2", "depot_id": "B", "gross_weight_t": 24, "version": 1}
+  ],
+  "road_network": {
+    "roads": [
+      {"road_id": "R-BRIDGE", "from": "A", "to": "J1", "minutes": 20, "weight_limit_t": 30, "direction": "two_way", "effective_from": "2026-11-24T00:00", "effective_to": "2026-11-25T00:00", "authority": "县乡道养护站", "note": "A 村至 J1 村公路桥，限重 30 吨"},
+      {"road_id": "R-DEPOT-B", "from": "B", "to": "A", "minutes": 10, "weight_limit_t": 40, "direction": "two_way", "effective_from": "2026-11-24T00:00", "effective_to": "2026-11-25T00:00", "authority": "县乡道养护站", "note": "B 停放点联络道"},
+      {"road_id": "R-DETOUR-1", "from": "A", "to": "C", "minutes": 30, "weight_limit_t": 40, "direction": "two_way", "effective_from": "2026-11-24T00:00", "effective_to": "2026-11-25T00:00", "authority": "县乡道养护站", "note": "重车绕行段 A 至岔口 C"},
+      {"road_id": "R-DETOUR-2", "from": "C", "to": "J1", "minutes": 28, "weight_limit_t": 40, "direction": "two_way", "effective_from": "2026-11-24T00:00", "effective_to": "2026-11-25T00:00", "authority": "县乡道养护站", "note": "重车绕行段 岔口 C 至 J1"},
+      {"road_id": "R-J1J2", "from": "J1", "to": "J2", "minutes": 25, "weight_limit_t": 40, "direction": "one_way", "effective_from": "2026-11-24T00:00", "effective_to": "2026-11-25T00:00", "authority": "县乡道养护站", "note": "村道单行，只允许 J1 往 J2 方向"}
+    ],
+    "closures": [],
+    "permits": []
+  },
+  "scenario_packs": {
+    "permit_pack": [
+      {"doc_type": "heavy_vehicle_pass", "doc_id": "PASS-2026-077", "authority": "县道路运输管理局", "road_id": "R-BRIDGE", "machine_id": "T1", "effective_from": "2026-11-24T07:00", "effective_to": "2026-11-24T12:00", "note": "重车临时通行证，出发前生效，准许 T1 拖挂过桥"}
+    ],
+    "closure_pack": [
+      {"doc_type": "closure_order", "doc_id": "CLOSE-2026-131", "authority": "县道路运输管理局", "road_id": "R-BRIDGE", "effective_from": "2026-11-24T07:00", "effective_to": "2026-11-24T12:00", "note": "桥梁封闭延长令，晨间调度窗内全封闭"}
+    ]
+  },
+  "jobs": [
+    {"job_id": "JOB-J1", "village_id": "J1", "arrive_by": "2026-11-24T09:00", "priority": 20, "service_minutes": {"unload": 10, "sanitize": 5, "shift_change": 5}},
+    {"job_id": "JOB-J2", "village_id": "J2", "arrive_by": "2026-11-24T09:20", "priority": 10, "service_minutes": {"unload": 10, "sanitize": 5, "shift_change": 5}}
+  ],
+  "prior_commitments": [
+    {"commitment_id": "COMMIT-J1-001", "job_id": "JOB-J1", "village_committee": "J1 村民委员会", "machine_id": "T1", "arrive_at": "2026-11-24T08:20", "arrive_by": "2026-11-24T09:00", "route_road_ids": ["R-BRIDGE"]},
+    {"commitment_id": "COMMIT-J2-001", "job_id": "JOB-J2", "village_committee": "J2 村民委员会", "machine_id": "T2", "arrive_at": "2026-11-24T08:55", "arrive_by": "2026-11-24T09:20", "route_road_ids": ["R-DEPOT-B", "R-BRIDGE", "R-J1J2"]}
+  ]
+}
