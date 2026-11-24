@@ -1,0 +1,99 @@
+{
+  "scenario": "same-machine-conflicting-driving-cards",
+  "description": "driver-1 two adjacent work cards total 240 minutes; driver-2 later submits a 570-630 driving card for tractor-7. The vehicle terminal confirms continuous machine work 570-630 but records no driver. Without a bilateral witness-verified handoff the 60 minutes stay frozen.",
+  "machine_id": "tractor-7",
+  "day": "2026-06-01",
+  "events": [
+    {"id": "OC-D1-480-600", "kind": "work", "operator_id": "driver-1", "machine_id": "tractor-7", "start_minute": 480, "end_minute": 600, "source": "offline-card"},
+    {"id": "OC-D1-600-720", "kind": "work", "operator_id": "driver-1", "machine_id": "tractor-7", "start_minute": 600, "end_minute": 720, "source": "offline-card"},
+    {"id": "OC-D2-570-630", "kind": "work", "operator_id": "driver-2", "machine_id": "tractor-7", "start_minute": 570, "end_minute": 630, "source": "offline-card"},
+    {"id": "VT-7-570-630", "kind": "terminal", "machine_id": "tractor-7", "start_minute": 570, "end_minute": 630, "machine_working": true, "operator_recorded": false, "source": "vehicle-terminal"}
+  ],
+  "expected_without_extra_evidence": {
+    "payable_minutes": {"driver-1": 180},
+    "frozen_minutes": 60,
+    "disputed_by_operator": {"driver-1": 60, "driver-2": 60}
+  },
+  "handoff_570": {
+    "id": "HO-7-570",
+    "kind": "handoff",
+    "machine_id": "tractor-7",
+    "minute": 570,
+    "from_operator": "driver-1",
+    "to_operator": "driver-2",
+    "signed_by": ["driver-1", "driver-2"],
+    "witness": {"witness_id": "witness-zhou", "name": "witness zhou", "verified": true},
+    "note": "bilateral signed handoff at minute 570, witness verifies both operators were physically present"
+  },
+  "expected_path_a_handoff_570": {
+    "payable_minutes": {"driver-1": 180, "driver-2": 60},
+    "frozen_minutes": 0
+  },
+  "handoff_630": {
+    "id": "HO-7-630",
+    "kind": "handoff",
+    "machine_id": "tractor-7",
+    "minute": 630,
+    "from_operator": "driver-1",
+    "to_operator": "driver-2",
+    "signed_by": ["driver-1", "driver-2"],
+    "witness": {"witness_id": "witness-zhou", "name": "witness zhou", "verified": true}
+  },
+  "coaching_570_630": {
+    "id": "CA-D2-570-630",
+    "kind": "companion",
+    "mode": "coach",
+    "machine_id": "tractor-7",
+    "operator_id": "driver-2",
+    "driver_id": "driver-1",
+    "start_minute": 570,
+    "end_minute": 630,
+    "signed_by": ["driver-1", "driver-2"],
+    "witness": {"witness_id": "witness-zhou", "verified": true},
+    "note": "driver-2 was only coaching in the cab, not driving"
+  },
+  "expected_path_b_coaching": {
+    "payable_minutes": {"driver-1": 240},
+    "coach_minutes": {"driver-2": 60},
+    "frozen_minutes": 0
+  },
+  "unsigned_handoff_570": {
+    "id": "HO-7-570-DRAFT",
+    "kind": "handoff",
+    "machine_id": "tractor-7",
+    "minute": 570,
+    "from_operator": "driver-1",
+    "to_operator": "driver-2",
+    "signed_by": ["driver-1"],
+    "witness": {"witness_id": "witness-zhou", "verified": false},
+    "note": "only one signature and no witness verification: must not decide attribution regardless of upload order"
+  },
+  "reupload_card": {
+    "id": "OC-D2-570-630",
+    "kind": "work",
+    "operator_id": "driver-2",
+    "machine_id": "tractor-7",
+    "start_minute": 570,
+    "end_minute": 630,
+    "source": "offline-card"
+  },
+  "reupload_renamed_copy": {
+    "filename": "renamed-driver2-copy.json",
+    "card": {
+      "id": "OC-D2-570-630-UPLOAD-99",
+      "kind": "work",
+      "operator_id": "driver-2",
+      "machine_id": "tractor-7",
+      "start_minute": 570,
+      "end_minute": 630,
+      "source": "offline-card"
+    }
+  },
+  "replacement_chain": [
+    {"id": "RC-9-V1-EVT", "card_id": "RC-9", "version": 1, "kind": "work", "operator_id": "driver-3", "machine_id": "tractor-9", "start_minute": 300, "end_minute": 360},
+    {"id": "RC-9-V2-EVT", "card_id": "RC-9", "version": 2, "replaces": ["RC-9-V1-EVT"], "kind": "work", "operator_id": "driver-3", "machine_id": "tractor-9", "start_minute": 300, "end_minute": 390}
+  ],
+  "clean_other_machine": [
+    {"id": "OC-D3-480-540", "kind": "work", "operator_id": "driver-3", "machine_id": "tractor-8", "start_minute": 480, "end_minute": 540}
+  ]
+}
