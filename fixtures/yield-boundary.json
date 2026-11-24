@@ -1,0 +1,72 @@
+{
+  "season": "2026-summer",
+  "grid_size_m": 10,
+  "clock_offsets_min": {"header": -3, "flow": 5, "gps": 2},
+  "clock_offset_note": "offset = master_minus_local；割台、流量、GPS 时间戳均为各自独立时钟读数",
+  "boundary_cross_master_min": 540,
+  "fields": [
+    {"field_id": "F1", "field_rect": [0, 0, 50, 20]},
+    {"field_id": "F2", "field_rect": [50, 0, 100, 20]}
+  ],
+  "lag_bands_min": {"high": [2, 3], "low": [0.5, 1.5]},
+  "header_events": [
+    {"at_min": 535, "state": "on"},
+    {"at_min": 543, "state": "off"},
+    {"at_min": 544, "state": "on"},
+    {"at_min": 549, "state": "off"}
+  ],
+  "gps_fixes": [
+    {"at_min": 530, "x_m": 5, "y_m": 5},
+    {"at_min": 531, "x_m": 15, "y_m": 5},
+    {"at_min": 532, "x_m": 25, "y_m": 5},
+    {"at_min": 533, "x_m": 15, "y_m": 5},
+    {"at_min": 534, "x_m": 35, "y_m": 5},
+    {"at_min": 535, "x_m": 45, "y_m": 5},
+    {"at_min": 536, "x_m": 45, "y_m": 5},
+    {"at_min": 537, "x_m": 48, "y_m": 5},
+    {"at_min": 538, "x_m": 52, "y_m": 5},
+    {"at_min": 539, "x_m": 65, "y_m": 5},
+    {"at_min": 540, "x_m": 75, "y_m": 5},
+    {"at_min": 541, "x_m": 85, "y_m": 5},
+    {"at_min": 542, "x_m": 92, "y_m": 5},
+    {"at_min": 542, "x_m": 95, "y_m": 5},
+    {"at_min": 543, "x_m": 95, "y_m": 5},
+    {"at_min": 544, "x_m": 95, "y_m": 5},
+    {"at_min": 545, "x_m": 95, "y_m": 5}
+  ],
+  "flow_pulses": [
+    {"pulse_id": "p1", "at_min": 534, "kg": 50, "throughput": "high", "sensor_field_id": "F1"},
+    {"pulse_id": "p2", "at_min": 535, "kg": 50, "throughput": "high", "sensor_field_id": "F1"},
+    {"pulse_id": "pB", "at_min": 537, "kg": 40, "throughput": "boundary", "sensor_field_id": "F2"},
+    {"pulse_id": "p3", "at_min": 539, "kg": 50, "throughput": "low", "sensor_field_id": "F2"},
+    {"pulse_id": "p4", "at_min": 541, "kg": 50, "throughput": "low", "sensor_field_id": "F2"}
+  ],
+  "load_events": [
+    {"at_min": 538, "state": "start", "hopper_kg": 0},
+    {"at_min": 540, "state": "carry", "unload_kg": 0, "note": "跨地块不清仓，车斗残粮带入 F2 作业段"}
+  ],
+  "weighings": [
+    {"at_min": 555, "action": "unload", "net_kg": 240, "hopper_after_kg": 0}
+  ],
+  "calibrations": {
+    "flush_trial": {
+      "calibration_id": "CAL-FLUSH",
+      "kind": "header_stop_to_flow_clear",
+      "header_stop_master_min": 540,
+      "flow_clear_master_min": 542.5,
+      "throughput": "high",
+      "applies_to_pulse": "pB",
+      "evidence": "本机高吞吐下割台停机到流量清零冲洗试验"
+    },
+    "bypass_weigh": {
+      "calibration_id": "CAL-BYPASS",
+      "kind": "bypass_weigh_and_cleanout",
+      "cleanout_complete_master_min": 539.2,
+      "boundary_cross_master_min": 540,
+      "bypass_net_kg": 100,
+      "throughput": "low",
+      "applies_to_pulse": "pB",
+      "evidence": "同班次旁路称重与清仓响应，过界前 F1 谷物已排尽"
+    }
+  }
+}
